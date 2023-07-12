@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iflytek.dao.OrderDao">
+
+    <!--
+    自定义模糊查询:
+        条件：订单状态、订单号、下单日期、手机号码，
+        此处查询还未对敏感数据进行脱敏及订单状态中的数字改变文字进行处理，需要前端进行状态判断传递数字参数
+    -->
+    <select id="like" resultType="com.iflytek.pojo.Order">
+        select * from orders
+        <where>
+            <if test="orderId != null and orderId != ''">
+                order_id like '%${orderId}%'
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like '%${phone}%'
+            </if>
+            <if test="orderStatus != null and orderStatus != ''">
+                and order_status like '%${orderStatus}%'
+            </if>
+            <if test="orderTime != null and orderTime != ''">
+                and convert(order_time,DATETIME) like '${orderTime}%'
+            </if>
+        </where>
+    </select>
+
+</mapper>
